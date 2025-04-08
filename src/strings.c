@@ -169,6 +169,10 @@ const u8 gText_TheBattle[] = _("the battle");
 const u8 gText_ThePokemonList[] = _("the POKéMON LIST");
 const u8 gText_TheShop[] = _("the shop");
 const u8 gText_ThePC[] = _("the PC");
+// Nuzlocke Text
+const u8 gText_BallsCannotBeUsedNuz[] = _("You already saw a POKéMON\non this route!{PAUSE_UNTIL_PRESS}");
+const u8 gText_BallsCannotBeUsedNuzDup[] = _("You already saw this POKéMON\non another route!{PAUSE_UNTIL_PRESS}");
+const u8 gText_WontHaveEffectNuzlocke[] = _("It won't have any effect due to\nrunning Nuzlocke challenge.{PAUSE_UNTIL_PRESS}");
 
 const u8 *const gBagMenu_ReturnToStrings[] =
 {

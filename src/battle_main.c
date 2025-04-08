@@ -103,6 +103,8 @@ static void TurnValuesCleanUp(bool8 var0);
 static void SpriteCB_BounceEffect(struct Sprite *sprite);
 static void BattleStartClearSetData(void);
 static void DoBattleIntro(void);
+static void BattleLostNuzlocke(void);
+static void BattleIntroNuzlockDups(void);
 static void TryDoEventsBeforeFirstTurn(void);
 static void HandleTurnActionSelectionState(void);
 static void RunTurnActionsFunctions(void);
@@ -2959,7 +2961,7 @@ static void ClearSetBScriptingStruct(void)
     memset(&gBattleScripting, 0, sizeof(gBattleScripting));
 
     gBattleScripting.windowsType = temp;
-    gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle;
+    gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle |= FlagGet(FLAG_NUZLOCKE);
     gBattleScripting.expOnCatch = (B_EXP_CATCH >= GEN_6);
     gBattleScripting.specialTrainerBattleType = specialBattleType;
 }
@@ -3730,9 +3732,30 @@ static void DoBattleIntro(void)
                 gBattleStruct->startingStatus = VarGet(B_VAR_STARTING_STATUS);
                 gBattleStruct->startingStatusTimer = VarGet(B_VAR_STARTING_STATUS_TIMER);
             }
-            gBattleMainFunc = TryDoEventsBeforeFirstTurn;
+            gBattleMainFunc = BattleIntroNuzlockDups;
         }
         break;
+    }
+}
+
+static void BattleIntroNuzlockDups(void)
+{
+    if (gBattleControllerExecFlags == 0)
+    {
+        if (gNuzlockeCannotCatch == 2){  // If Pokemon was first in this route and was already caught
+            PrepareStringBattle(STRINGID_NUZLOCKEDUPS, 0);
+        }
+        gBattleMainFunc = TryDoEventsBeforeFirstTurn;
+    }
+}
+
+static void BattleLostNuzlocke(void)
+{
+    if (gBattleControllerExecFlags == 0)
+    {
+        gBattleMainFunc = HandleEndTurn_FinishBattle;
+        PrepareStringBattle(STRINGID_NUZLOCKELOST, 0);
+        FlagClear(FLAG_NUZLOCKE);
     }
 }
 
@@ -5477,6 +5500,10 @@ static void HandleEndTurn_BattleLost(void)
     else
     {
         gBattlescriptCurrInstr = BattleScript_LocalBattleLost;
+            if (FlagGet(FLAG_NUZLOCKE) && FlagGet(FLAG_SYS_POKEDEX_GET)){
+                gBattleMainFunc = BattleLostNuzlocke;
+                return;
+            }
     }
 
     gBattleMainFunc = HandleEndTurn_FinishBattle;
@@ -5528,6 +5555,7 @@ static void HandleEndTurn_MonFled(void)
 
 static void HandleEndTurn_FinishBattle(void)
 {
+    gNuzlockeCannotCatch = FALSE;  // While not necissary, resetting this is nice to stay deterministic
     u32 i, battler;
 
     if (gCurrentActionFuncId == B_ACTION_TRY_FINISH || gCurrentActionFuncId == B_ACTION_FINISHED)

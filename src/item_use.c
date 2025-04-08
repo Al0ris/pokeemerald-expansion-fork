@@ -45,6 +45,8 @@
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/map_types.h"
+#include "battle_setup.h"
+#include "region_map.h"
 
 static void SetUpItemUseCallback(u8);
 static void FieldCB_UseItemOnField(void);
@@ -1100,6 +1102,8 @@ void ItemUseOutOfBattle_EvolutionStone(u8 taskId)
 
 static u32 GetBallThrowableState(void)
 {
+    bool32 isWildShiny = GetMonData(&gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]], MON_DATA_IS_SHINY);
+
     if (IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT))
      && IsBattlerAlive(GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)))
         return BALL_THROW_UNABLE_TWO_MONS;
@@ -1107,9 +1111,12 @@ static u32 GetBallThrowableState(void)
         return BALL_THROW_UNABLE_NO_ROOM;
     else if (B_SEMI_INVULNERABLE_CATCH >= GEN_4 && (gStatuses3[GetCatchingBattler()] & STATUS3_SEMI_INVULNERABLE))
         return BALL_THROW_UNABLE_SEMI_INVULNERABLE;
-    else if (FlagGet(B_FLAG_NO_CATCHING))
+    else if (FlagGet(B_FLAG_NO_CATCHING)) 
         return BALL_THROW_UNABLE_DISABLED_FLAG;
-
+    else if (!isWildShiny && gNuzlockeCannotCatch == 1) 
+        return BALL_THROW_UNABLE_NUZLOCKE;
+    else if (!isWildShiny && gNuzlockeCannotCatch == 2) 
+        return BALL_THROW_UNABLE_NUZLOCKE_DUPLICATE;
     return BALL_THROW_ABLE;
 }
 
@@ -1121,17 +1128,30 @@ bool32 CanThrowBall(void)
 static const u8 sText_CantThrowPokeBall_TwoMons[] = _("Cannot throw a ball!\nThere are two Pokémon out there!\p");
 static const u8 sText_CantThrowPokeBall_SemiInvulnerable[] = _("Cannot throw a ball!\nThere's no Pokémon in sight!\p");
 static const u8 sText_CantThrowPokeBall_Disabled[] = _("POKé BALLS cannot be used\nright now!\p");
+
 void ItemUseInBattle_PokeBall(u8 taskId)
 {
     switch (GetBallThrowableState())
     {
     case BALL_THROW_ABLE:
-    default:
-        RemoveBagItem(gSpecialVar_ItemId, 1);
+        default:
+            RemoveBagItem(gSpecialVar_ItemId, 1);
+            if (!InBattlePyramid())
+                Task_FadeAndCloseBagMenu(taskId);
+            else
+                CloseBattlePyramidBag(taskId);
+            break;
+    case BALL_THROW_UNABLE_NUZLOCKE:
         if (!InBattlePyramid())
-            Task_FadeAndCloseBagMenu(taskId);
+            DisplayItemMessage(taskId, FONT_NORMAL, gText_BallsCannotBeUsedNuz, CloseItemMessage);
         else
-            CloseBattlePyramidBag(taskId);
+            DisplayItemMessageInBattlePyramid(taskId, gText_BallsCannotBeUsedNuz, Task_CloseBattlePyramidBagMessage);
+        break;
+    case BALL_THROW_UNABLE_NUZLOCKE_DUPLICATE:
+        if (!InBattlePyramid())
+            DisplayItemMessage(taskId, FONT_NORMAL, gText_BallsCannotBeUsedNuzDup, CloseItemMessage);
+        else
+            DisplayItemMessageInBattlePyramid(taskId, gText_BallsCannotBeUsedNuzDup, Task_CloseBattlePyramidBagMessage);
         break;
     case BALL_THROW_UNABLE_TWO_MONS:
         if (!InBattlePyramid())
@@ -1249,8 +1269,14 @@ bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon)
             failStr = sText_CantThrowPokeBall_Disabled;
             cannotUse = TRUE;
             break;
+        case BALL_THROW_UNABLE_NUZLOCKE:
+            failStr = gText_BallsCannotBeUsedNuz;
+            cannotUse = TRUE;
+            break;
+        case BALL_THROW_UNABLE_NUZLOCKE_DUPLICATE:
+            failStr = gText_BallsCannotBeUsedNuz;
+            cannotUse = TRUE;
         }
-        break;
     case EFFECT_ITEM_INCREASE_ALL_STATS:
         for (i = STAT_ATK; i < NUM_STATS; i++)
         {

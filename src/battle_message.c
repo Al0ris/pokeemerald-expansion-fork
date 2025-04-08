@@ -35,6 +35,7 @@
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
 #include "constants/weather.h"
+#include "overworld.h"
 
 struct BattleWindowText
 {
@@ -168,6 +169,10 @@ static const u8 sText_TwoInGameTrainersDefeated[] = _("You defeated {B_TRAINER1_
 const u8 gText_drastically[] = _("drastically ");
 const u8 gText_severely[] = _("severely ");
 static const u8 sText_TerrainReturnedToNormal[] = _("The terrain returned to normal!"); // Unused
+
+// Nuzlocke Battle String
+static const u8 sText_PlayerFailedNuzlocke[] = _("{B_PLAYER_NAME} failed the\nNuzlocke challenge.\pThe Nuzlocke setting\nhas been turned off.\p");
+static const u8 sText_PlayerDuplicateMon[] = _("Since this type has already been\ncaught, it will not count towards\pthe Nuzlocke challenge.\p");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -894,6 +899,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_SENDCAUGHTMONPARTYORBOX]              = COMPOUND_STRING("Add {B_DEF_NAME} to your party?"),
     [STRINGID_PKMNSENTTOPCAFTERCATCH]               = gText_PkmnSentToPCAfterCatch,
 };
+
 
 const u16 gTrainerUsedItemStringIds[] =
 {
@@ -2222,6 +2228,7 @@ void BufferStringBattle(u16 stringID, u32 battler)
         }
         else
         {
+            gNuzlockeCannotCatch = HasWildPokmnOnThisRouteBeenSeen(GetCurrentRegionMapSectionId(), FALSE);
             if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
             {
                 if (gBattleTypeFlags & BATTLE_TYPE_TOWER_LINK_MULTI)
@@ -2337,6 +2344,12 @@ void BufferStringBattle(u16 stringID, u32 battler)
         break;
     case STRINGID_TRAINERSLIDE:
         stringPtr = gBattleStruct->trainerSlideMsg;
+        break;
+    case STRINGID_NUZLOCKELOST:
+        stringPtr = sText_PlayerFailedNuzlocke;
+        break;
+    case STRINGID_NUZLOCKEDUPS:
+        stringPtr = sText_PlayerDuplicateMon;
         break;
     default: // load a string from the table
         if (stringID >= BATTLESTRINGS_COUNT)

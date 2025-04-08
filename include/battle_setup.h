@@ -46,6 +46,8 @@ extern const struct RematchTrainer gRematchTable[REMATCH_TABLE_ENTRIES];
 
 extern TrainerBattleParameter gTrainerBattleParameter;
 extern u16 gPartnerTrainerId;
+// Seen before
+extern bool8 gNuzlockeCannotCatch;
 
 #define TRAINER_BATTLE_PARAM gTrainerBattleParameter.params
 
@@ -103,6 +105,10 @@ void TrainerBattleLoadArgs(const u8 *data);
 void TrainerBattleLoadArgsTrainerA(const u8 *data);
 void TrainerBattleLoadArgsTrainerB(const u8 *data);
 void TrainerBattleLoadArgsSecondTrainer(const u8 *data);
+
+// Nuzlocke Wild Pokemon Tracking
+u8 HasWildPokmnOnThisRouteBeenSeen(u8 currLocation, bool8 setVarForThisEnc);
+u8 currLocConvertForNuzlocke(u8 currLocation);
 
 void DoStandardWildBattle_Debug(void);
 void BattleSetup_StartTrainerBattle_Debug(void);

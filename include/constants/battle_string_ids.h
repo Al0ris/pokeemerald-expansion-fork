@@ -8,6 +8,9 @@
 #define STRINGID_USEDMOVE       4
 #define STRINGID_BATTLEEND      5
 #define STRINGID_TRAINERSLIDE   6
+// Nuzlocke lost text
+#define STRINGID_NUZLOCKELOST   7
+#define STRINGID_NUZLOCKEDUPS   8
 
 // todo: make some of those names less vague: attacker/target vs pkmn, etc.
 #define STRINGID_TRAINER1LOSETEXT                     12

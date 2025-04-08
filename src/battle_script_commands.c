@@ -604,6 +604,18 @@ static void Cmd_unused(void);
 static void Cmd_tryworryseed(void);
 static void Cmd_callnative(void);
 
+const u16 sLevelCaps[NUM_SOFT_CAPS] = { 15, 19, 24, 29, 31, 33, 42, 46, 51 };
+const double sLevelCapReduction[7] = { .5, .33, .25, .20, .15, .10, .05 };
+const double sRelativePartyScaling[27] =
+{
+    3.00, 2.75, 2.50, 2.33, 2.25,
+    2.00, 1.80, 1.70, 1.60, 1.50,
+    1.40, 1.30, 1.20, 1.10, 1.00,
+    0.90, 0.80, 0.75, 0.66, 0.50,
+    0.40, 0.33, 0.25, 0.20, 0.15,
+    0.10, 0.05,
+};
+
 void (* const gBattleScriptingCommandsTable[])(void) =
 {
     Cmd_attackcanceler,                          //0x0
@@ -4735,9 +4747,18 @@ static void Cmd_tryfaintmon(void)
         }
         else
         {
+            if (FlagGet(FLAG_NUZLOCKE) && FlagGet(FLAG_SYS_POKEDEX_GET))
+            {
+                if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0)
+                {
+                    bool8 dead = TRUE;
+                    SetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_DEAD, &dead);
+                }
+            }
             destinyBondBattler = gBattlerAttacker;
             faintScript = BattleScript_FaintTarget;
         }
+
         if (!(gAbsentBattlerFlags & (1u << battler))
          && !IsBattlerAlive(battler))
         {
@@ -5025,7 +5046,72 @@ static u32 GetMonHoldEffect(struct Pokemon *mon)
 
     return holdEffect;
 }
+// NEW CODE
+u8 GetTeamLevel(void)
+{
+    u8 i;
+    u16 partyLevel = 0;
+    u16 threshold = 0;
 
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+            partyLevel += gPlayerParty[i].level;
+        else
+            break;
+    }
+    partyLevel /= i;
+
+    threshold = partyLevel * .8;
+    partyLevel = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE)
+        {
+            if (gPlayerParty[i].level >= threshold)
+                partyLevel += gPlayerParty[i].level;
+        }
+        else
+            break;
+    }
+    partyLevel /= i;
+
+    return partyLevel;
+}
+
+double GetPkmnExpMultiplier(u8 level)
+{
+    double lvlCapMultiplier = 1.0;
+    u8 levelDiff;
+    s8 avgDiff;
+
+    // multiply the usual exp yield by the soft cap multiplier
+    if (level >= sLevelCaps[FlagGet(NUM_BADGES)])
+    {
+        levelDiff = level - sLevelCaps[FlagGet(NUM_BADGES)];
+        if (levelDiff > 6)
+        {
+            levelDiff = 6;
+            lvlCapMultiplier = sLevelCapReduction[levelDiff];
+        }
+    }
+    
+
+    // multiply the usual exp yield by the party level multiplier
+    avgDiff = level - GetTeamLevel();
+
+    if (avgDiff >= 12)
+        avgDiff = 12;
+    else if (avgDiff <= -14)
+        avgDiff = -14;
+
+    avgDiff += 14;
+
+    return lvlCapMultiplier * sRelativePartyScaling[avgDiff];
+}
+
+//OLD CODE
 static void Cmd_getexp(void)
 {
     CMD_ARGS(u8 battler);
@@ -17103,14 +17189,17 @@ void ApplyExperienceMultipliers(s32 *expAmount, u8 expGetterMonId, u8 faintedBat
     {
         // Note: There is an edge case where if a pokemon receives a large amount of exp, it wouldn't be properly calculated
         //       because of multiplying by scaling factor(the value would simply be larger than an u32 can hold). Hence u64 is needed.
+        double expMultiplier = GetPkmnExpMultiplier(gPlayerParty[gBattleStruct->expGetterMonId].level);
         u64 value = *expAmount;
         u8 faintedLevel = gBattleMons[faintedBattler].level;
         u8 expGetterLevel = GetMonData(&gPlayerParty[expGetterMonId], MON_DATA_LEVEL);
 
         value *= sExperienceScalingFactors[(faintedLevel * 2) + 10];
         value /= sExperienceScalingFactors[faintedLevel + expGetterLevel + 10];
+        
 
-        *expAmount = value + 1;
+
+        *expAmount = (value * expMultiplier) + 1;
     }
 }
 

@@ -4539,3 +4539,13 @@ static void DebugAction_Util_CheckEWRAMCounters(u8 taskId)
 {
     Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_EWRAMCounters);
 }
+
+void DebugFunction(void);
+
+void DebugFunction(void){
+    CMD_ARGS(u8 battler);
+    u32 battler;
+    battler = GetBattlerForBattleScript(cmd->battler);
+    MgbaPrintf(MGBA_LOG_WARN, "MON_DATA_DEAD VALUE: %u", VarGet(GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_DEAD)));
+    MgbaPrintf(MGBA_LOG_WARN, "HasWildPokmmnOnthisRouteBeenSeen VALUE: %u", HasWildPokmnOnThisRouteBeenSeen(GetCurrentRegionMapSectionId(), 0));
+}
