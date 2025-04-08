@@ -1274,7 +1274,7 @@ bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon)
             cannotUse = TRUE;
             break;
         case BALL_THROW_UNABLE_NUZLOCKE_DUPLICATE:
-            failStr = gText_BallsCannotBeUsedNuz;
+            failStr = gText_BallsCannotBeUsedNuzDup;
             cannotUse = TRUE;
         }
     case EFFECT_ITEM_INCREASE_ALL_STATS:
