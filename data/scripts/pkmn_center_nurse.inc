@@ -65,6 +65,12 @@ EventScript_PkmnCenterNurse_ReturnPkmn::
 	waitmessage
 	applymovement VAR_0x800B, Movement_PkmnCenterNurse_Bow
 	waitmovement 0
+	goto_if_unset FLAG_LEVEL_CAP, EventScript_PkmnCenterNurse_ReturnPkmnDefault
+	special LevelCapToString
+	message gText_WeHopeToSeeYouAgain4
+	return
+
+EventScript_PkmnCenterNurse_ReturnPkmnDefault::	
 	message gText_WeHopeToSeeYouAgain
 	return
 

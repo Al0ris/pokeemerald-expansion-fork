@@ -109,6 +109,8 @@ void TrainerBattleLoadArgsSecondTrainer(const u8 *data);
 // Nuzlocke Wild Pokemon Tracking
 u8 HasWildPokmnOnThisRouteBeenSeen(u8 currLocation, bool8 setVarForThisEnc);
 u8 currLocConvertForNuzlocke(u8 currLocation);
+// Level Cap 
+void LevelCapToString(void);
 
 void DoStandardWildBattle_Debug(void);
 void BattleSetup_StartTrainerBattle_Debug(void);

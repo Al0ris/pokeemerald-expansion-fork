@@ -3,6 +3,7 @@
 #include "load_save.h"
 #include "battle_setup.h"
 #include "battle_transition.h"
+#include "caps.h"
 #include "main.h"
 #include "task.h"
 #include "safari_zone.h"
@@ -1872,6 +1873,13 @@ u16 CountBattledRematchTeams(u16 trainerId)
 
     return i;
 }
+
+void LevelCapToString(void){
+        u8 lvl_txt[3];
+        ConvertIntToDecimalStringN(lvl_txt, GetCurrentLevelCap(), STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringCopy(gStringVar1, lvl_txt);
+    }
+    
 
 u8 HasWildPokmnOnThisRouteBeenSeen(u8 currLocation, bool8 setVarForThisEnc){
     u8 varToCheck, bitToCheck;

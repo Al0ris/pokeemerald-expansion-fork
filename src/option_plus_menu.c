@@ -1,4 +1,5 @@
 #include "global.h"
+#include "event_data.h"
 #include "option_plus_menu.h"
 #include "main.h"
 #include "menu.h"
@@ -887,6 +888,12 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsCurrentFont      = sOptions->sel_custom[MENUITEM_CUSTOM_FONT];
     gSaveBlock2Ptr->optionsDisableMatchCall = sOptions->sel_custom[MENUITEM_CUSTOM_MATCHCALL];
     gSaveBlock2Ptr->optionsLevelCap         = sOptions->sel_custom[MENUITEM_CUSTOM_LEVEL_CAP];
+
+    if (gSaveBlock2Ptr->optionsLevelCap == EXP_CAP_SOFT || gSaveBlock2Ptr->optionsLevelCap == EXP_CAP_HARD) {
+        FlagSet(FLAG_LEVEL_CAP);
+    } else {
+        FlagClear(FLAG_LEVEL_CAP);
+    }
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
