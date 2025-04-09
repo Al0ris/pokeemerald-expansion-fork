@@ -1002,6 +1002,7 @@ const u8 gText_OptionFontEmerald[] = _("EMERALD");    //tx_optionsPlus
 const u8 gText_OptionFontFireRed[] = _("FRLG");        //tx_optionsPlus
 const u8 gText_Font[] = _("FONT");  //tx_optionsPlus
 const u8 gText_OptionMatchCalls[] = _("OVERWORLD CALLS");    //tx_optionsPlus
+const u8 gText_OptionLevelCaps[] = _("LEVEL CAP");    //tx_optionsPlus
 const u8 gText_OptionMenuSave[] = _("SAVE");
 const u8 gText_SoundMono[] = _("MONO");
 const u8 gText_SoundStereo[] = _("STEREO");
@@ -1010,6 +1011,9 @@ const u8 gText_FrameTypeNumber[] = _("");
 const u8 gText_ButtonTypeNormal[] = _("NORMAL");
 const u8 gText_ButtonTypeLR[] = _("LR");
 const u8 gText_ButtonTypeLEqualsA[] = _("L=A");
+const u8 gText_LevelCapNone[] = _("NONE");
+const u8 gText_LevelCapSoft[] = _("SOFT");
+const u8 gText_LevelCapHard[] = _("HARD");
 const u8 gText_NumPlayerLink[] = _("{STR_VAR_1}P LINK");
 const u8 gText_BronzeCard[] = _("BRONZE");
 const u8 gText_CopperCard[] = _("COPPER");

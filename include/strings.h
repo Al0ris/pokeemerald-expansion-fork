@@ -275,6 +275,10 @@ extern const u8 gText_OptionFontFireRed[];  //tx_optionsPlus
 extern const u8 gText_OptionFontEmerald[];  //tx_optionsPlus
 extern const u8 gText_OptionMatchCalls[];   //tx_optionsPlus
 extern const u8 gText_OptionMenuSave[];
+extern const u8 gText_OptionLevelCaps[];
+extern const u8 gText_LevelCapNone[];
+extern const u8 gText_LevelCapSoft[];
+extern const u8 gText_LevelCapHard[];
 
 extern const u8 gText_MaleSymbol[];
 extern const u8 gText_FemaleSymbol[];
