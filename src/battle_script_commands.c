@@ -17188,7 +17188,6 @@ void ApplyExperienceMultipliers(s32 *expAmount, u8 expGetterMonId, u8 faintedBat
     {
         // Note: There is an edge case where if a pokemon receives a large amount of exp, it wouldn't be properly calculated
         //       because of multiplying by scaling factor(the value would simply be larger than an u32 can hold). Hence u64 is needed.
-        double expMultiplier = GetPkmnExpMultiplier(gPlayerParty[gBattleStruct->expGetterMonId].level);
         u64 value = *expAmount;
         u8 faintedLevel = gBattleMons[faintedBattler].level;
         u8 expGetterLevel = GetMonData(&gPlayerParty[expGetterMonId], MON_DATA_LEVEL);
@@ -17198,7 +17197,7 @@ void ApplyExperienceMultipliers(s32 *expAmount, u8 expGetterMonId, u8 faintedBat
         
 
 
-        *expAmount = (value * expMultiplier) + 1;
+        *expAmount = (value) + 1;
     }
 }
 
