@@ -218,3 +218,25 @@ Route102_Text_RouteSignPetalburg:
 	.string "ROUTE 102\n"
 # 110 "data/maps/Route102/scripts.pory"
 	.string "{LEFT_ARROW} PETALBURG CITY$"
+
+Route102_EventScript_Joe::
+# 113 "data/maps/Route102/scripts.pory"
+	trainerbattle_single TRAINER_JOE_ROUTE_102, Joe_Intro, Joe_Outro
+# 114 "data/maps/Route102/scripts.pory"
+	msgbox PostBattle_Joe, MSGBOX_AUTOCLOSE
+# 115 "data/maps/Route102/scripts.pory"
+	waitmessage
+	end
+
+
+Joe_Intro::
+# 119 "data/maps/Route102/scripts.pory"
+	.string "Light work type shi$"
+
+Joe_Outro::
+# 122 "data/maps/Route102/scripts.pory"
+	.string "Aight damn keep movin$"
+
+PostBattle_Joe::
+# 125 "data/maps/Route102/scripts.pory"
+	.string "Just put the fries in \nthe bag Lil bro.$"

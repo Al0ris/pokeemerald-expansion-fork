@@ -16873,3 +16873,30 @@ Double Battle: No
 Kyogre
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_JOE_ROUTE_102 ===
+Name: JOE
+Class: Rival
+Pic: Red
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Smart Trainer
+
+Shinx
+Level: 7
+Ability: Intimidate
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- Leer
+- Tackle
+- Thunder Shock
+- Bite
+
+Bagon
+Level: 7
+Ability: Sheer Force
+IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+- Ember
+- Bite
+- Mud Slap
+- Focus Energy
