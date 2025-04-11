@@ -137,6 +137,8 @@ static const u8 sTeraShardDesc[]      = _("These shards may\n"
 static const u8 sGenericMulchDesc[]   = _("A fertilizer that\n"
                                           "is unsuitable for\n"
                                           "local soil.");
+static const u8 sCleanseTagUse[]    = _("An item that \n"
+                                          "toggles wild encounters.");                                          
 
 const struct Item gItemsInfo[] =
 {
@@ -8324,12 +8326,12 @@ const struct Item gItemsInfo[] =
     [ITEM_CLEANSE_TAG] =
     {
         .name = _("Cleanse Tag"),
-        .price = (I_PRICE >= GEN_7) ? 5000 : 200,
-        .holdEffect = HOLD_EFFECT_REPEL,
-        .description = sPureIncenseDesc,
-        .pocket = POCKET_ITEMS,
-        .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .price = 0,
+        .importance = 1,
+        .description = sCleanseTagUse,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_CleanseTag,
         .flingPower = 30,
         .iconPic = gItemIcon_CleanseTag,
         .iconPalette = gItemIconPalette_CleanseTag,

@@ -174,6 +174,10 @@ const u8 gText_BallsCannotBeUsedNuz[] = _("You already saw a POKéMON\non this r
 const u8 gText_BallsCannotBeUsedNuzDup[] = _("You already saw this POKéMON\non another route!{PAUSE_UNTIL_PRESS}");
 const u8 gText_WontHaveEffectNuzlocke[] = _("It won't have any effect due to\nrunning Nuzlocke challenge.{PAUSE_UNTIL_PRESS}");
 
+// Infinite Repel Cleanse Tag
+const u8 gText_CleanseTagTurnOn[] = _("Turned on Cleanse Tag.\nAll wild encounters will be avoided.{PAUSE_UNTIL_PRESS}");
+const u8 gText_CleanseTagTurnOff[] = _("Turned off Cleanse Tag.{PAUSE_UNTIL_PRESS}");
+
 const u8 *const gBagMenu_ReturnToStrings[] =
 {
     [ITEMMENULOCATION_FIELD]               = gText_TheField,

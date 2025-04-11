@@ -279,6 +279,8 @@ extern const u8 gText_OptionLevelCaps[];
 extern const u8 gText_LevelCapNone[];
 extern const u8 gText_LevelCapSoft[];
 extern const u8 gText_LevelCapHard[];
+extern const u8 gText_CleanseTagTurnOn[];
+extern const u8 gText_CleanseTagTurnOff[];
 
 extern const u8 gText_MaleSymbol[];
 extern const u8 gText_FemaleSymbol[];
